@@ -1,9 +1,28 @@
 clearvars
 clc
 
-I = imread('../data/DSC_3291.JPG');
+I = imread('D:\Projects\Research\biocomputer\data\2025-05-01 Taewoo\NewLocation_0hrs_ch1_150-800.bmp');
+I = rgb2gray(I);
 
-ROI = [1743, 4389, 998, 3392];
+Ifilt = imtophat(I, strel('disk', 7));
+
+imshowpair(I, Ifilt, 'montage')
+return
+
+%% Filter the image
+
+%mask = imbinarize(Ifilt, 'adaptive', 'Sensitivity', 1);
+mask = Ifilt > 2;
+mask = imopen(mask, strel('disk', 2));
+
+skel = bwskel(mask,'MinBranchLength', 10);
+
+imshowpair(I, skel)
+return
+
+
+%%
+
 
 I = I(ROI(3):ROI(4), ROI(1):ROI(2), :);
 
